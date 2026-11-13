@@ -103,6 +103,24 @@ These results reflect **manual simulation tests**, not a formal automated test s
 6. For a normal cycle, ensure AUTO is enabled, STOP and RESET are inactive, and devices are ready. Pulse START, set `ProductType` to `1`, `2`, or `3`, pulse `ProductDetected`, and activate `AtSortingPosition`. For type C, activate and then clear `ProductAtExit` to complete the cycle.
 7. For fault tests, inject a conveyor fault or a cylinder jam and observe the diagnostic outputs and state `900`. Remove the simulated fault before resetting; use the separate simulation-only position-reset controls if necessary.
 
+## Screenshots
+
+### Main PLC Program — Ladder Diagram
+![Main PLC Program](screenshots/01-main-program.png)
+
+### Sorting Control Sequence — Structured Text
+![Sorting Control Sequence](screenshots/02-state-machine.png)
+
+### Conveyor Motor Control and Diagnostics
+![Motor Control](screenshots/03-motor-control.png)
+
+### Pneumatic Cylinder Control
+![Cylinder Control](screenshots/04-cylinder-control.png)
+
+### Pneumatic Cylinder Simulation
+![Cylinder Simulation](screenshots/05-cylinder-simulation.png)
+
+
 ## Repository structure
 
 ```text
