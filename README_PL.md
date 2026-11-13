@@ -103,6 +103,23 @@ Wyniki dotyczą **ręcznych testów w symulatorze**, a nie automatycznego zestaw
 6. Dla normalnego cyklu włącz AUTO, wyłącz STOP i RESET oraz sprawdź gotowość urządzeń. Podaj impuls START, ustaw `ProductType` na `1`, `2` lub `3`, podaj impuls `ProductDetected`, a następnie aktywuj `AtSortingPosition`. Dla produktu C aktywuj i zwolnij `ProductAtExit`, aby zakończyć cykl.
 7. Aby przetestować awarię, zasymuluj błąd przenośnika lub blokadę siłownika i obserwuj sygnały diagnostyczne oraz stan `900`. Usuń symulowaną przyczynę awarii przed resetem; w razie potrzeby skorzystaj z osobnych wejść przywracania pozycji symulatora.
 
+## Zrzuty ekranu
+
+### Główny program PLC — Ladder Diagram
+![Główny program PLC](screenshots/01-main-program.png)
+
+### Sekwencja sterowania sortowaniem — Structured Text
+![Sekwencja sterowania](screenshots/02-state-machine.png)
+
+### Sterowanie i diagnostyka silnika przenośnika
+![Sterowanie silnikiem](screenshots/03-motor-control.png)
+
+### Sterowanie siłownikiem pneumatycznym
+![Sterowanie siłownikiem](screenshots/04-cylinder-control.png)
+
+### Symulacja ruchu siłownika pneumatycznego
+![Symulacja siłownika](screenshots/05-cylinder-simulation.png)
+
 ## Struktura repozytorium
 
 ```text
