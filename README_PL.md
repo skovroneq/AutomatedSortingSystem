@@ -129,7 +129,11 @@ AutomatedSortingSystem/
 ├── project/
 │   └── AutomatedSortingSystem.smc2
 └── screenshots/
-    └── (zrzuty ekranu z Sysmac Studio)
+    ├── 01-main-program.png
+    ├── 02-state-machine.png
+    ├── 03-motor-control.png
+    ├── 04-cylinder-control.png
+    └── 05-cylinder-simulation.png
 ```
 
 ## Zakres i ograniczenia
