@@ -167,12 +167,18 @@ Powyższe wyniki dotyczą **ręcznych testów symulacyjnych**, a nie formalnego 
 ### Zarządzanie alarmami i diagnostyka
 ![Menedżer alarmów](screenshots/06-alarm-manager.png)
 
+## Schemat poglądowy stanowiska
+
+![Schemat stanowiska sortującego](docs/sorting-system-overview.png)
+
 ## Struktura repozytorium
 
 ```text
 AutomatedSortingSystem/
 ├── README.md
 ├── README_PL.md
+├── docs/
+│   └── sorting-system-overview.png
 ├── project/
 │   └── AutomatedSortingSystem.smc2
 └── screenshots/
