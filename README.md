@@ -166,6 +166,9 @@ These results reflect **manual simulation tests**, not a formal automated test s
 
 ![Alarm Manager](screenshots/06-alarm-manager.png)
 
+## System layout
+
+![Automated Sorting System – Top View](docs/sorting-system-overview.png)
 
 ## Repository structure
 
@@ -173,6 +176,8 @@ These results reflect **manual simulation tests**, not a formal automated test s
 AutomatedSortingSystem/
 ├── README.md
 ├── README_PL.md
+├── docs/
+│   └── sorting-system-overview.png
 ├── project/
 │   └── AutomatedSortingSystem.smc2
 └── screenshots/
