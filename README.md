@@ -196,7 +196,6 @@ AutomatedSortingSystem/
 - Cylinder movement is represented by a simplified timer-based model, not a pneumatic or mechanical physics model.
 - Transport and exit-sensor waiting states do not currently include dedicated product travel timeouts.
 - The alarm manager reports one prioritized diagnostic code at a time and does not implement an alarm history or acknowledgement mechanism.
-- Not all implemented alarm codes have been individually tested.
 - No physical I/O, fieldbus devices, HMI, or hardware safety system is included.
 
 ## Potential future improvements
