@@ -6,7 +6,7 @@
 
 ## Opis projektu
 
-Automated Sorting System to projekt portfolio przedstawiający projektowanie, implementację i symulację przemysłowej sekwencji sortowania produktów z wykorzystaniem sterownika PLC OMRON serii NJ. System koordynuje pracę **trzech przenośników i dwóch siłowników pneumatycznych**, kierując produkty do jednego z trzech miejsc docelowych w zależności od ich typu.
+Automated Sorting System to projekt przedstawiający implementację i symulację przemysłowej sekwencji sortowania produktów z wykorzystaniem sterownika PLC OMRON serii NJ. System koordynuje pracę **trzech przenośników i dwóch siłowników pneumatycznych**, kierując produkty do jednego z trzech miejsc docelowych w zależności od ich typu.
 
 Projekt koncentruje się na modułowym programowaniu PLC, sterowaniu sekwencyjnym, blokadach technologicznych, obsłudze usterek, zarządzaniu alarmami diagnostycznymi oraz powtarzalnych testach w środowisku symulacyjnym. **Został przetestowany w symulatorze sterownika Sysmac Studio, a nie na rzeczywistej maszynie.**
 
@@ -38,7 +38,7 @@ Główny program LD `PRG_SortingSystem` łączy sygnały operatorskie i czujniko
 | Komponent | Język | Odpowiedzialność |
 | --- | --- | --- |
 | `PRG_SortingSystem` | LD | Integracja systemu, blokady, wywołania bloków i połączenia sygnałów symulacyjnych |
-| `FB_SortingSequence` | ST | Kierowanie produktów, automat stanów, obsługa START/STOP/RESET oraz status cyklu i systemu |
+| `FB_SortingSequence` | ST | Kierowanie produktów, sterowanie sekwencyjne, obsługa START/STOP/RESET oraz status cyklu i systemu |
 | `FB_ConveyorMotor` | ST | Sterowanie silnikiem, monitorowanie sygnału potwierdzenia pracy oraz diagnostyka rozruchu i zaniku potwierdzenia |
 | `FB_PneumaticCylinder` | ST | Sterowanie zaworami, monitorowanie czujników położenia oraz diagnostyka przekroczenia czasu wysuwania i wsuwania |
 | `FB_CylinderSimulator` | ST | Symulacja położenia siłownika, opóźnienie ruchu 500 ms, wymuszanie zablokowania ruchu i ręczne przywracanie pozycji |
@@ -48,7 +48,7 @@ Główny program LD `PRG_SortingSystem` łączy sygnały operatorskie i czujniko
 
 Trzy instancje bloku silnika obsługują przenośniki 1–3. Po dwie instancje bloków sterowania pneumatycznego i symulacji siłownika obsługują siłowniki A i B.
 
-## Sekwencja sortowania (automat stanów)
+## Sekwencyjna logika sterowania
 
 | Stan | Opis |
 | --- | --- |
@@ -59,19 +59,19 @@ Trzy instancje bloku silnika obsługują przenośniki 1–3. Po dwie instancje b
 | `40` / `41` | EXTEND_B / RETRACT_B - przekierowanie produktu B i powrót siłownika B |
 | `50` / `51` / `52` | SORT_C / WAIT_EXIT_DETECTION / WAIT_EXIT_CLEAR - śledzenie produktu C na wyjściu |
 | `60` | COMPLETE - sygnalizacja zakończenia cyklu i powrót do oczekiwania |
-| `900` | FAULT - zatrzaśnięty stan usterki; komendy ruchu są blokowane |
+| `900` | FAULT - stan błędu; komendy ruchu są blokowane |
 
-Logika wykrywa zbocze narastające sygnału START i ignoruje go, gdy aktywne są STOP, RESET, tryb ręczny, wyłączenie wykonywania sekwencji lub usterka. W każdym cyklu programu komendy wyjściowe są najpierw zerowane, a następnie ustawiane zgodnie z bieżącym stanem automatu.
+Logika wykrywa zbocze narastające sygnału START i ignoruje go, gdy aktywne są STOP, RESET, tryb ręczny, wyłączenie wykonywania sekwencji lub usterka. W każdym cyklu programu komendy wyjściowe są najpierw zerowane, a następnie ustawiane zgodnie z bieżącym stanem sekwencji.
 
 Ponowne uzbrajanie czujników zapobiega wielokrotnemu uruchamianiu cykli przez stale aktywny czujnik obecności produktu.
 
-Wyłączenie trybu automatycznego przerywa sekwencję sortowania i blokuje komendy ruchu. Zatrzaśnięta usterka pozostaje aktywna do czasu spełnienia odpowiednich warunków resetu. Ponowne włączenie trybu automatycznego nie uruchamia samoczynnie sekwencji — wymagany jest nowy sygnał START.
+Wyłączenie trybu automatycznego przerywa sekwencję sortowania i blokuje komendy ruchu. Usterka pozostaje aktywna do czasu spełnienia odpowiednich warunków resetu. Ponowne włączenie trybu automatycznego nie uruchamia samoczynnie sekwencji — wymagany jest nowy sygnał START.
 
 ## Obsługa usterek i diagnostyka
 
 - **Usterka zbiorcza:** `AnyDeviceFault` łączy sygnały usterek wszystkich trzech silników i obu siłowników.
 - **Gotowość urządzeń:** `DevicesReady` wymaga braku usterek urządzeń, wsunięcia obu siłowników oraz nieaktywnego sygnału STOP.
-- **Diagnostyka silników:** `FB_ConveyorMotor` wykrywa przekroczenie czasu rozruchu i utratę potwierdzenia pracy silnika; dostępne jest również zewnętrzne wejście usterki.
+- **Diagnostyka silników:** `FB_ConveyorMotor` wykrywa przekroczenie czasu rozruchu i utratę potwierdzenia pracy silnika; dostępny jest również zewnętrzny sygnał usterki.
 - **Diagnostyka pneumatyki:** `FB_PneumaticCylinder` monitoruje zakończenie wysuwania i wsuwania z **2-sekundowym limitem czasu ruchu** oraz wykrywa sprzeczne sygnały czujników położenia.
 - **Reakcja na usterkę:** aktywna usterka przełącza sekwencję do stanu `900`, blokuje żądania ruchu i uniemożliwia ponowne uruchomienie procesu sygnałem START.
 - **Resetowanie:** sekwencja może powrócić do stanu IDLE po ustąpieniu odpowiednich warunków usterki i podaniu sygnału RESET; **sam RESET nie uruchamia ponownie systemu**. Poszczególne bloki urządzeń mogą wymagać spełnienia dodatkowych warunków resetu.
@@ -130,7 +130,7 @@ W środowisku Sysmac Studio przeprowadzono następujące testy:
 | Alarm `502` - przekroczenie czasu wsuwania siłownika B | Zaliczony |
 | Kasowanie alarmu po usunięciu usterki i wykonaniu resetu | Zaliczony |
 | Wyłączenie trybu automatycznego podczas transportu | Zaliczony |
-| Wyłączenie trybu automatycznego przy zatrzaśniętej usterce | Zaliczony |
+| Wyłączenie trybu automatycznego przy aktywnej usterce | Zaliczony |
 | Ponowne uruchomienie wymaga nowego sygnału START | Zaliczony |
 | Ponowny test prawidłowego sortowania A/B/C po integracji menedżera alarmów | Zaliczony |
 
@@ -197,7 +197,6 @@ AutomatedSortingSystem/
 - Ruch siłowników odwzorowano za pomocą uproszczonego modelu czasowego, a nie modelu fizycznego pneumatyki lub mechaniki.
 - Stany transportu i oczekiwania na czujnik wyjściowy nie mają obecnie osobnych limitów czasu przemieszczania produktu.
 - Menedżer alarmów udostępnia jeden kod diagnostyczny o najwyższym priorytecie i nie realizuje historii alarmów ani mechanizmu ich potwierdzania.
-- Nie wszystkie zaimplementowane kody alarmowe zostały przetestowane indywidualnie.
 - Projekt nie obejmuje fizycznych wejść/wyjść, urządzeń magistrali przemysłowej, panelu HMI ani sprzętowego systemu bezpieczeństwa.
 
 ## Możliwe kierunki rozwoju
